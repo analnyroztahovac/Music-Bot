@@ -5,19 +5,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord.js');
-const { Player } = require("discord-player");
 
 // ClientID + GuildID
 const { clientID, guildID, token } = require('./config.json');
-
-
-client.slashcommands = new Discord.Collection()
-client.player = new Player(client, {
-	ytdlOptions: {
-		quality: "highestaudio",
-		highWaterMark: 1 << 25
-	}
-})
 
 
 // Constanta pre vytvorene prikazy

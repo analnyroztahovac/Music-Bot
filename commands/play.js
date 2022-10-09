@@ -1,10 +1,9 @@
-const { SlashCommandBuilder, EmbedBuilder, Client } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, Client, Embed } = require("discord.js");
 const { QueryType } = require("discord-player");
-const fs = require('node:fs');
 
 module.exports = {
     data: new SlashCommandBuilder()
-    .setName(play)
+    .setName('play')
     .setDescription('Spusti prehravanie hudby.')
     .addSubcommand((subcommand) =>
         subcommand
@@ -28,16 +27,17 @@ module.exports = {
                 option.setName("nazov").setDescription("Zadaj nazov pesnicky").setRequired(true))    
     ),
 
-    async execute({client, interaction}) {
+    run: async( {client, interaction} ) => {
+                
         if (!interaction.member.voice.channel) {
             // Member sa nenachadza vo voice kanali, posleme empeheemral embed
             const Embed = new EmbedBuilder()
                 .setTitle('❌ Hudba')
                 .setDescription('Pre pouzitie tohto prikazu sa musis nachadzat vo Voice kanali!')
-                .setFooter('Imedium Music Bot')
+                .setFooter({text: 'Imedium Music Bot'})
                 .setColor(0xff5555)
 
-                return interaction.reply({ embeds: [Embed], ephemeral: true });
+                return interaction.editReply({ embeds: [Embed], ephemeral: true });
         }
         // Member sa nachadza sa vo voice kanali
         
@@ -45,8 +45,6 @@ module.exports = {
         if (!queue.connection) 
             // Pokial nie je BOT v danom voice kanali , tak sa tam pripoji
             await queue.connect(interaction.member.voice.channel)
-        
-        const Embed = new EmbedBuilder()
         
         // Vyberieme ktory argument member pouzil (song; playlist; search)
         switch ( interaction.options.getSubcommand() ) {
@@ -65,22 +63,23 @@ module.exports = {
                     const Embed = new EmbedBuilder()
                         .setTitle("❌ Hudba")
                         .setDescription('Nepodarilo sa najst ziadne video s URL `'+url+'`!')
-                        .setFooter('Imeidum Music Bot')
+                        .setFooter( { text: 'Imedium Music Bot' } )
                         .setColor(0xff5555)
-                    return interaction.reply( { embed: [Embed] } ); }
+                    return interaction.editReply( { embeds: [Embed] } ); }                                                                                                           
                 
-                const song = result.tracks[0];
+                const song = hladanie.tracks[0];
                 await queue.addTrack(song);
 
                 const Embed = new EmbedBuilder()
-                    .setTitle("✅ Hudba")
+                    .setTitle("<:purple_checkmark:1028654948751245332> Hudba")
                     .setDescription(`Uspesne sa podarilo najst a pridat do poradia tvoju hudbu!`)
+                    .setThumbnail(song.thumbnail)
                     .addFields(
                         { name: `**${song.title}** - ${song.duration}`, value: `${song.url}` }
                     )
-                    .setFooter("Imedium Music Bot")
-                    .setColor(0x59e17f)
-                return interaction.reply( {embed: [Embed] } )
+                    .setFooter( { text: "Imedium Music Bot" } )
+                    .setColor(0x8c66b2)
+                await interaction.editReply( { embeds: [Embed] } )
             }
             
             // Vybral playlist argument
@@ -92,29 +91,30 @@ module.exports = {
                     searchEngine: QueryType.YOUTUBE_PLAYLIST
                 })
                 
-                if (result.tracks.length === 0) {
+                if (hladanie.tracks.length === 0) {
                     // Nepodarilo sa najst zaidnu pesnicku s takou url
                     const Embed = new EmbedBuilder()
                         .setTitle("❌ Hudba")
                         .setDescription('Nepodarilo sa najst ziadne video s URL `'+url+'`!')
-                        .setFooter('Imeidum Music Bot')
+                        .setFooter( { text: 'Imedium Music Bot' } )
                         .setColor(0xff5555)
-                    return interaction.reply( { embed: [Embed] } );}
+                    return interaction.editReply( { embeds: [Embed] } ); }
                 
-                const playlist = result.playlist
-                await queue.addTracks(result.tracks)
+                const playlist = hladanie.playlist
+                await queue.addTracks(hladanie.tracks)
                 
                 // Posleme spravu s embedom
                 const Embed = new EmbedBuilder()
-                    .setTitle("✅ Hudba")
+                    .setTitle("<:purple_checkmark:1028654948751245332> Hudba")
                     .setDescription('Uspesne sa podarilo najst a pridat do poradia tvoj playlist!')
+                    .setThumbnail(playlist.thumbnail)
                     .addFields(
                         { name: `**${playlist.title}** - ${result.tracks.length} pesniciek`, value: `${playlist.url}`}
                     )
-                    .setFooter("Imedium Music Bot")
-                    .setColor(0x59e17f)
-                return interaction.reply( { embed: [Embed] } ); }
-            
+                    .setFooter( { text: 'Imedium Music Bot' } )
+                    .setColor(0x8c66b2)
+                await interaction.editReply( {embeds: [Embed] } )
+                    }
             // Vybral search argument
             case "search": {
                 
@@ -124,29 +124,31 @@ module.exports = {
                     searchEngine: QueryType.AUTO
                 })
                 
-                if (result.tracks.length === 0) {
+                if (hladanie.tracks.length === 0) {
                     // Nepodarilo sa najst zaidnu pesnicku s takou url
                     const Embed = new EmbedBuilder()
                         .setTitle("❌ Hudba")
                         .setDescription('Nepodarilo sa najst ziadne video s URL `'+url+'`!')
-                        .setFooter('Imeidum Music Bot')
+                        .setFooter( { text: 'Imedium Music Bot' } )
                         .setColor(0xff5555)
-                    return interaction.reply( { embed: [Embed] } );}
+                    return interaction.editReply( { embeds: [Embed] } ); }
                     
-                const song = result.tracks[0]
-                await queue.addTracks(song)
+                const song = hladanie.tracks[0]
+                await queue.addTrack(song)
                 
                 // Posleme spravu s embedom
                 const Embed = new EmbedBuilder()
-                    .setTitle("✅ Hudba")
+                    .setTitle("<:purple_checkmark:1028654948751245332> Hudba")
                     .setDescription(`Uspesne sa podarilo najst a pridat do poradia tvoju hudbu!`)
+                    .setThumbnail(song.thumbnail)
                     .addFields(
                         { name: `**${song.title}** - ${song.duration}`, value: `${song.url}` }
                     )
-                    .setFooter("Imedium Music Bot")
-                    .setColor(0x59e17f)
-                return interaction.reply( { embed: [Embed] } ); }
-                }
+                    .setFooter( { text: 'Imedium Music Bot' } )
+                    .setColor(0x8c66b2)
+                await interaction.editReply( { embeds: [Embed] } );
+                } }
         if (!queue.playing) await queue.play()
+        //return interaction.editReply( { embeds: [Embed] } );
     }
 }
