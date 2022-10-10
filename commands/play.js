@@ -1,17 +1,29 @@
-const {
-    SlashCommandBuilder,
-    EmbedBuilder,
-    Client,
-    Embed
-} = require("discord.js");
-const {
-    QueryType
-} = require("discord-player");
+/*
+  Discord /play {search | song | playlist} prikaz pre
+  pridavanie a nasledne prehravanie hudby vo Voice Kanaloch.
+ 
+ ++> Vysvetlenia roznych argumentov:
+    - search: Pokusi sa vyhladat pesnicku podla nazvu na roznych platformach (yt, soundcloud and watnot)
+    - song: Prehra pesnicku podla vlozenej URL adresy
+    - playlist: Prehra cely playlist podla vlozenej URL adresy
+*/
 
+/* Zakladne constanty potrebne pre celkove fungovanie prikazu */
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { QueryType } = require("discord-player");
+
+/* "Konfiguracia" emoji a farieb pre embedy */
+const emoji_check = "<:purple_checkmark:1028749364291698689>"
+const farba_error = "0xff5555"
+const farba_nonerror = "0x8c66b2"
+
+// Struktura prikazu, subcommandy, popisky, options
 module.exports = {
     data: new SlashCommandBuilder()
+        // Vytvorenie samotneho prikazu /play
         .setName('play')
         .setDescription('Spusti prehravanie hudby.')
+        // Subcommand pre nacitanie prave jednej pesnicky podla URL
         .addSubcommand((subcommand) =>
             subcommand
             .setName("song")
@@ -19,6 +31,7 @@ module.exports = {
             .addStringOption((option) =>
                 option.setName("url").setDescription("URL pesnicky").setRequired(true))
         )
+        // Subcommand pre nacitanie playlistu podla URL
         .addSubcommand((subcommand) =>
             subcommand
             .setName("playlist")
@@ -26,6 +39,7 @@ module.exports = {
             .addStringOption((option) =>
                 option.setName("url").setDescription("URL playlistu").setRequired(true))
         )
+        // Subcommand pre vyhladanie pesnicky podla jej nazvu
         .addSubcommand((subcommand) =>
             subcommand
             .setName("search")
@@ -34,10 +48,8 @@ module.exports = {
                 option.setName("nazov").setDescription("Zadaj nazov pesnicky").setRequired(true))
         ),
 
-    run: async ({
-        client,
-        interaction
-    }) => {
+    // Spustenie funkcie prikazu
+    run: async ({ client, interaction }) => {
 
         if (!interaction.member.voice.channel) {
             // Member sa nenachadza vo voice kanali, posleme empeheemral embed
@@ -47,14 +59,13 @@ module.exports = {
                 .setFooter({
                     text: 'Imedium Music Bot'
                 })
-                .setColor(0xff5555)
+                .setColor(farba_error)
 
             return interaction.editReply({
                 embeds: [Embed],
                 ephemeral: true
             });
         }
-        // Member sa nachadza sa vo voice kanali
 
         const queue = await client.player.createQueue(interaction.guild)
         if (!queue.connection)
@@ -80,7 +91,7 @@ module.exports = {
                     .setFooter({
                         text: 'Imedium Music Bot'
                     })
-                    .setColor(0xff5555)
+                    .setColor(farba_error)
                 return interaction.editReply({
                     embeds: [Embed]
                 });
@@ -90,7 +101,7 @@ module.exports = {
             await queue.addTrack(song);
 
             const Embed = new EmbedBuilder()
-                .setTitle("<:purple_checkmark:1028654948751245332> Hudba")
+                .setTitle(`${emoji_check} Hudba`)
                 .setDescription(`Uspesne sa podarilo najst a pridat do poradia tvoju hudbu!`)
                 .setThumbnail(song.thumbnail)
                 .addFields({
@@ -100,7 +111,7 @@ module.exports = {
                 .setFooter({
                     text: "Imedium Music Bot"
                 })
-                .setColor(0x8c66b2)
+                .setColor(farba_nonerror)
             await interaction.editReply({
                 embeds: [Embed]
             })
@@ -123,7 +134,7 @@ module.exports = {
                     .setFooter({
                         text: 'Imedium Music Bot'
                     })
-                    .setColor(0xff5555)
+                    .setColor(farba_error)
                 return interaction.editReply({
                     embeds: [Embed]
                 });
@@ -134,7 +145,7 @@ module.exports = {
 
             // Posleme spravu s embedom
             const Embed = new EmbedBuilder()
-                .setTitle("<:purple_checkmark:1028654948751245332> Hudba")
+                .setTitle(`${emoji_check} Hudba`)
                 .setDescription('Uspesne sa podarilo najst a pridat do poradia tvoj playlist!')
                 .setThumbnail(playlist.thumbnail)
                 .addFields({
@@ -144,7 +155,7 @@ module.exports = {
                 .setFooter({
                     text: 'Imedium Music Bot'
                 })
-                .setColor(0x8c66b2)
+                .setColor(farba_nonerror)
             await interaction.editReply({
                 embeds: [Embed]
             })
@@ -166,7 +177,7 @@ module.exports = {
                     .setFooter({
                         text: 'Imedium Music Bot'
                     })
-                    .setColor(0xff5555)
+                    .setColor(farba_error)
                 return interaction.editReply({
                     embeds: [Embed]
                 });
@@ -177,7 +188,7 @@ module.exports = {
 
             // Posleme spravu s embedom
             const Embed = new EmbedBuilder()
-                .setTitle("<:purple_checkmark:1028654948751245332> Hudba")
+                .setTitle(`${emoji_check} Hudba`)
                 .setDescription(`Uspesne sa podarilo najst a pridat do poradia tvoju hudbu!`)
                 .setThumbnail(song.thumbnail)
                 .addFields({
@@ -187,7 +198,7 @@ module.exports = {
                 .setFooter({
                     text: 'Imedium Music Bot'
                 })
-                .setColor(0x8c66b2)
+                .setColor(farba_nonerror)
             await interaction.editReply({
                 embeds: [Embed]
             });
