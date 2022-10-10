@@ -15,8 +15,11 @@ const { QueryType } = require("discord-player");
 /* "Konfiguracia" emoji a farieb pre embedy */
 const { 
     emoji_check, /* Emoji, ktory sa zobrazi pri uspesnej akcii vedla textu "Hudba" */
+    emoji_error, /* Emoji , ktory sa zobrazi pri NEuspensej akcii vedla textu "Hudba" */
     farba_error, /* Farba, ktora bude pouzita pri Embede pokial doslo niekde ku chybe */
-    farba_nonerror /* Farba, ktora bude pouzita pri Embede pokial NEdoslo niekde ku chybe */
+    farba_nonerror, /* Farba, ktora bude pouzita pri Embede pokial NEdoslo niekde ku chybe */
+    footer, /* Footer, ktory bude pouzity pri embed spravach */
+    footer_icon /* Footer ikona, ktora bude pouzita pri embed spravach */
     } = require('../config.json');
 
 // Struktura prikazu, subcommandy, popisky, options
@@ -56,10 +59,10 @@ module.exports = {
         if (!interaction.member.voice.channel) {
             // Member sa nenachadza vo voice kanali, posleme empeheemral embed
             const Embed = new EmbedBuilder()
-                .setTitle('❌ Hudba')
+                .setTitle(`Hudba ${emoji_error}`)
                 .setDescription('Pre pouzitie tohto prikazu sa musis nachadzat vo Voice kanali!')
                 .setFooter({
-                    text: 'Imedium Music Bot'
+                    text: `${footer}`, iconURL: `${footer_icon}`
                 })
                 .setColor(farba_error)
 
@@ -88,10 +91,10 @@ module.exports = {
             if (hladanie.tracks.length === 0) {
                 // Nepodarilo sa najst zaidnu pesnicku s takou url
                 const Embed = new EmbedBuilder()
-                    .setTitle("❌ Hudba")
+                    .setTitle(`Hudba ${emoji_error}`)
                     .setDescription('Nepodarilo sa najst ziadne video s URL `' + url + '`!')
                     .setFooter({
-                        text: 'Imedium Music Bot'
+                        text: `${footer}`, iconURL: `${footer_icon}`
                     })
                     .setColor(farba_error)
                 return interaction.editReply({
@@ -103,7 +106,7 @@ module.exports = {
             await queue.addTrack(song);
 
             const Embed = new EmbedBuilder()
-                .setTitle(`${emoji_check} Hudba`)
+                .setTitle(`Hudba ${emoji_check}`)
                 .setDescription(`Uspesne sa podarilo najst a pridat do poradia tvoju hudbu!`)
                 .setThumbnail(song.thumbnail)
                 .addFields({
@@ -111,7 +114,7 @@ module.exports = {
                     value: `${song.url}`
                 })
                 .setFooter({
-                    text: "Imedium Music Bot"
+                    text: `${footer}`, iconURL: `${footer_icon}`
                 })
                 .setColor(farba_nonerror)
             await interaction.editReply({
@@ -131,10 +134,10 @@ module.exports = {
             if (hladanie.tracks.length === 0) {
                 // Nepodarilo sa najst zaidnu pesnicku s takou url
                 const Embed = new EmbedBuilder()
-                    .setTitle("❌ Hudba")
+                    .setTitle(`Hudba ${emoji_error}`)
                     .setDescription('Nepodarilo sa najst ziadne video s URL `' + url + '`!')
                     .setFooter({
-                        text: 'Imedium Music Bot'
+                        text: `${footer}`, iconURL: `${footer_icon}`
                     })
                     .setColor(farba_error)
                 return interaction.editReply({
@@ -147,7 +150,7 @@ module.exports = {
 
             // Posleme spravu s embedom
             const Embed = new EmbedBuilder()
-                .setTitle(`${emoji_check} Hudba`)
+                .setTitle(`Hudba ${emoji_check}`)
                 .setDescription('Uspesne sa podarilo najst a pridat do poradia tvoj playlist!')
                 .setThumbnail(playlist.thumbnail)
                 .addFields({
@@ -155,7 +158,7 @@ module.exports = {
                     value: `${playlist.url}`
                 })
                 .setFooter({
-                    text: 'Imedium Music Bot'
+                    text: `${footer}`, iconURL: `${footer_icon}`
                 })
                 .setColor(farba_nonerror)
             await interaction.editReply({
@@ -174,10 +177,10 @@ module.exports = {
             if (hladanie.tracks.length === 0) {
                 // Nepodarilo sa najst zaidnu pesnicku s takou url
                 const Embed = new EmbedBuilder()
-                    .setTitle("❌ Hudba")
+                    .setTitle(`Hudba ${emoji_error}`)
                     .setDescription('Nepodarilo sa najst ziadne video s nazvom `' + nazov + '`!')
                     .setFooter({
-                        text: 'Imedium Music Bot'
+                        text: `${footer}`, iconURL: `${footer_icon}`
                     })
                     .setColor(farba_error)
                 return interaction.editReply({
@@ -190,15 +193,15 @@ module.exports = {
 
             // Posleme spravu s embedom
             const Embed = new EmbedBuilder()
-                .setTitle(`${emoji_check} Hudba`)
-                .setDescription(`Uspesne sa podarilo najst a pridat do poradia tvoju hudbu!`)
+                .setTitle(`Hudba ${emoji_check}`)
+                .setDescription(`Podla tvojho zadaneho nazvu \`${nazov}\` sa podarilo najst a pridat do poradia tuto pesnicku.`)
                 .setThumbnail(song.thumbnail)
                 .addFields({
-                    name: `**${song.title}** - ${song.duration}`,
+                    name: `**${song.title}** - \`${song.duration}\``,
                     value: `${song.url}`
                 })
                 .setFooter({
-                    text: 'Imedium Music Bot'
+                    text: `${footer}`, iconURL: `${footer_icon}`
                 })
                 .setColor(farba_nonerror)
             await interaction.editReply({

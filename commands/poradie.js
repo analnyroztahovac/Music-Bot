@@ -13,8 +13,11 @@ const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 /* const emoji a farieb pre embedy */
 const { 
     emoji_check, /* Emoji, ktory sa zobrazi pri uspesnej akcii vedla textu "Hudba" */
+    emoji_error, /* Emoji , ktory sa zobrazi pri NEuspensej akcii vedla textu "Hudba" */
     farba_error, /* Farba, ktora bude pouzita pri Embede pokial doslo niekde ku chybe */
-    farba_nonerror /* Farba, ktora bude pouzita pri Embede pokial NEdoslo niekde ku chybe */
+    farba_nonerror, /* Farba, ktora bude pouzita pri Embede pokial NEdoslo niekde ku chybe */
+    footer, /* Footer, ktory bude pouzity pri embed spravach */
+    footer_icon /* Footer ikona, ktora bude pouzita pri embed spravach */
     } = require('../config.json');
 
 // Struktura prikazu, popisky, option
@@ -34,9 +37,9 @@ module.exports = {
         if (!queue || !queue.playing) {
             // Pokial ziadny rad nie je, alebo nehra 
             const Embed = new EmbedBuilder()
-                .setTitle("❌ Hudba")
+                .setTitle(`Hudba ${emoji_error}`)
                 .setDescription("Neboli najdene ziadne pesnicky v poradi.")
-                .setFooter( { text:"Imedium Music Bot" } )
+                .setFooter( { text: `${footer}`, iconURL: `${footer_icon}` } )
                 .setColor(farba_error)
             return interaction.editReply( {embeds: [Embed] } ); }
         
@@ -48,30 +51,30 @@ module.exports = {
         if (strana > max_stran) {
             // Vybral vacsiu stranu aka existuje
             const Embed = new EmbedBuilder()
-                .setTitle("❌ Hudba")
+                .setTitle(`Hudba ${emoji_error}`)
                 .setDescription(`Zadal si vacsiu stranu nez existuje. Najvacsia strana, ktoru mozes zadat je ${max_stran}`)
-                .setFooter( {text: "Imedium Music Bot"} )
+                .setFooter( { text: `${footer}`, iconURL: `${footer_icon}` } )
                 .setColor(farba_error)
             return interaction.editReply( { embeds: [Embed] } ); }
         
         // String pre pesnicky cez ktore loopneme a naformatujeme ich informacie
         const poradie_pesniciek = queue.tracks.slice(strana * 10, strana * 10 + 10).map((song, i) => {
-            return `**${strana * 10 + i + 1 }.** ${song.title} **-** \`${song.duration}\``
+            return `**${strana * 10 + i + 1 }.** ${song.title} **-** **\`${song.duration}\`**`
         }).join("\n")
 
         // Dodatkove constanty pre lepsiu citatelnost
         const aktualna_pesnicka = queue.current
-        const info_aktualnej = `${aktualna_pesnicka.title} **-** \`${aktualna_pesnicka.duration}\`` || "Ziadna"
+        const info_aktualnej = `${aktualna_pesnicka.title} **-** **\`${aktualna_pesnicka.duration}\`** \n(${aktualna_pesnicka.url})` || "Ziadna"
     
         const Embed = new EmbedBuilder()
-            .setTitle(`${emoji_check} Hudba`)
+            .setTitle(`Hudba ${emoji_check}`)
             .setDescription(`Zobrazujem aktualne poradie pesniciek.\n Strana: **${strana + 1} / ${max_stran}** | Celkom pesniciek: **${celkom_pesniciek + 1}**`)
             .setThumbnail(aktualna_pesnicka.thumbnail)
             .addFields(
                 { name: `Aktualne hra:`, value: `${info_aktualnej}` },
                 { name: `Dalsie v poradi:`, value: `${poradie_pesniciek || "Ziadne dalsie."}` }, )
             .setColor(farba_nonerror)
-            .setFooter( { text: "Imedium Music Bot" } )
+            .setFooter( { text: `${footer}`, iconURL: `${footer_icon}` } )
         
         // Odpovieme na prikaz konecnym embedom
         await interaction.editReply({embeds: [Embed]})
