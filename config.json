@@ -1,6 +1,9 @@
 {
-  "token": "testest",
+  "token": "vas_token",
   "prefix": "!",
   "clientID": "925858190271320095",
-  "guildID": "838055726408400976"
+  "guildID": "903639601636343809",
+  "emoji_check": "<:purple_checkmark:1028749364291698689>",
+  "farba_error": "0xff5555",
+  "farba_nonerror": "0x8c66b2"
 }

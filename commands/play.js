@@ -13,9 +13,11 @@ const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { QueryType } = require("discord-player");
 
 /* "Konfiguracia" emoji a farieb pre embedy */
-const emoji_check = "<:purple_checkmark:1028749364291698689>"
-const farba_error = "0xff5555"
-const farba_nonerror = "0x8c66b2"
+const { 
+    emoji_check, /* Emoji, ktory sa zobrazi pri uspesnej akcii vedla textu "Hudba" */
+    farba_error, /* Farba, ktora bude pouzita pri Embede pokial doslo niekde ku chybe */
+    farba_nonerror /* Farba, ktora bude pouzita pri Embede pokial NEdoslo niekde ku chybe */
+    } = require('./config.json');
 
 // Struktura prikazu, subcommandy, popisky, options
 module.exports = {
