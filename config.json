@@ -3,7 +3,10 @@
   "prefix": "!",
   "clientID": "925858190271320095",
   "guildID": "903639601636343809",
-  "emoji_check": "<:purple_checkmark:1028749364291698689>",
+  "emoji_check": "<:purple_checkmark:1029083633564262501>",
+  "emoji_error": "<:red_x:1029083635107770459>",
   "farba_error": "0xff5555",
-  "farba_nonerror": "0x8c66b2"
+  "farba_nonerror": "0x8c66b2",
+  "footer": "Imedium Music Bot",
+  "footer_icon": "https://i.imgur.com/nr0EsvU.png"
 }
