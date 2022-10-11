@@ -8,8 +8,6 @@ const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 /* "Konfiguracia" emoji a farieb pre embedy */
 const { 
     emoji_check, /* Emoji, ktory sa zobrazi pri uspesnej akcii vedla textu "Hudba" */
-    emoji_error, /* Emoji , ktory sa zobrazi pri NEuspensej akcii vedla textu "Hudba" */
-    farba_error, /* Farba, ktora bude pouzita pri Embede pokial doslo niekde ku chybe */
     farba_nonerror, /* Farba, ktora bude pouzita pri Embede pokial NEdoslo niekde ku chybe */
     footer, /* Footer, ktory bude pouzity pri embed spravach */
     footer_icon /* Footer ikona, ktora bude pouzita pri embed spravach */
@@ -23,7 +21,7 @@ module.exports = {
         .setDescription('Zobrazi zakladne informacie bota.'),
     
     // Spustenie funkcie prikazu
-    run: async ( { client, interaction } ) => {
+    run: async ( { interaction } ) => {
         
         const play_prikaz = `**+>** \`search\` argument sluzi na vyhladanie pesnicky podla jej nazvu \n**+>** \`song\` argument sluzi na vyhladnie pesnicky podla jej URL adresy \n**+>** \`playlist\` argument sluzi na vyhladanie playlistu podla jeho URL adresy`
         const poradie_prikaz = 'Prikaz sluzi na zobrazenie aktualne hranej pesnicky ( *ak nejaka je* ) a za nou nasledujuce v poradi ( *ak nejake su* ) \n**+>** \`strana\` je optioal argument pre zobrazenie poradia na zadanej strane'
