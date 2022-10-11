@@ -25,5 +25,5 @@ const rest = new REST({ version: '10' }).setToken(token);
 
 // Output log
 rest.put(Routes.applicationGuildCommands(clientID, guildID), { body: commands })
-    .then(() => console.log('Uspesne registrovane ${data.length} prikazy.'))
+    .then(() => console.log(`Uspesne registrovane ${data.length} prikazy.`))
     .catch(console.error);
