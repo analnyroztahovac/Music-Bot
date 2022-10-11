@@ -20,7 +20,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         // Vytvorenie samotneho prikazu /info
         .setName('info')
-        .setDescription('Zobrazi zakladne informacie bota.')
+        .setDescription('Zobrazi zakladne informacie bota.'),
     
     // Spustenie funkcie prikazu
     run: async ( { client, interaction } ) => {
@@ -28,18 +28,22 @@ module.exports = {
         const play_prikaz = `**+>** \`search\` argument sluzi na vyhladanie pesnicky podla jej nazvu \n**+>** \`song\` argument sluzi na vyhladnie pesnicky podla jej URL adresy \n**+>** \`playlist\` argument sluzi na vyhladanie playlistu podla jeho URL adresy`
         const poradie_prikaz = 'Prikaz sluzi na zobrazenie aktualne hranej pesnicky ( *ak nejaka je* ) a za nou nasledujuce v poradi ( *ak nejake su* ) \n**+>** \`strana\` je optioal argument pre zobrazenie poradia na zadanej strane'
         const skip_prikaz = 'Prikaz sluzi na preskocanie aktualnej pesnicky a zaroven automaticky pusti za nou nasledujucu.'  
-        const stop_prikaz = ''
+        const stop_prikaz = 'Prikaz sluzi na ukoncenie aktualnej pesnicky a zaroven za nou nasledujuce ( *ak nejake su* )'
 
         // Embed const
         const Embed = new EmbedBuilder()
             .setTitle(`Hudba ${emoji_check}`)
             .setDescription('Open source, jednoduchy a napriek tomu efektivny discord music bot.\nSource kod mozno najst na: https://github.com/analnyroztahovac/Music-Bot')
+            .setColor(farba_nonerror)
             .addFields(
                 { name: 'Prikaz \`/play { search | song | playlist }\`', value: `${play_prikaz}` },
                 { name: 'Prikaz \`/poradie ( strana )\`', value: `${poradie_prikaz}` },
-                { name: 'Prikaz \`/skip\`', value: `${skip_prikaz}` }
-                { name: 'Prikaz \`/stop\`', value: `{$stop_prikaz}` }
+                { name: 'Prikaz \`/skip\`', value: `${skip_prikaz}` },
+                { name: 'Prikaz \`/stop\`', value: `${stop_prikaz}` }
                 )
             .setFooter( { text: `${footer}`, iconURL: `${footer_icon}` } )
+        
+        // Odpovieme na interaction
+        return interaction.editReply( { embeds: [Embed], ephemeral: true } )
     }
 }
