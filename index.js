@@ -35,14 +35,22 @@ client.once('ready', () => {
 });
 
 client.on('interactionCreate', async interaction => {
+	
 	if (!interaction.isChatInputCommand()) return;
 
 	const command = client.commands.get(interaction.commandName);
+	const command_name = interaction.commandName;
 
+	// Check ci je command platny
 	if (!command) return;
 
+	// Ephemeral defer pre info command
+	if (command_name === "info") {
+		await interaction.deferReply( { ephemeral: true } )
+		await command.run( { interaction } )
+		return };
+	
 	try {
-		//await command.execute(interaction);
 		await interaction.deferReply()
 		await command.run( {client, interaction} )
 	} catch (error) {

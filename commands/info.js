@@ -31,13 +31,13 @@ module.exports = {
         // Embed const
         const Embed = new EmbedBuilder()
             .setTitle(`Hudba ${emoji_check}`)
-            .setDescription('Open source, jednoduchy a napriek tomu efektivny discord music bot.\nSource kod mozno najst na: https://github.com/analnyroztahovac/Music-Bot')
+            .setDescription('Open source, jednoduchy a napriek tomu efektivny discord music bot.\nSource kod mozno najst na: https://github.com/analnyroztahovac/Music-Bot\n**Zoznam prikazov:**')
             .setColor(farba_nonerror)
             .addFields(
-                { name: 'Prikaz \`/play { search | song | playlist }\`', value: `${play_prikaz}` },
-                { name: 'Prikaz \`/poradie ( strana )\`', value: `${poradie_prikaz}` },
-                { name: 'Prikaz \`/skip\`', value: `${skip_prikaz}` },
-                { name: 'Prikaz \`/stop\`', value: `${stop_prikaz}` }
+                { name: 'Prikaz \`/play search | song | playlist\`:', value: `${play_prikaz}` },
+                { name: 'Prikaz \`/poradie ( strana )\`:', value: `${poradie_prikaz}` },
+                { name: 'Prikaz \`/skip\`:', value: `${skip_prikaz}` },
+                { name: 'Prikaz \`/stop\`:', value: `${stop_prikaz}` }
                 )
             .setFooter( { text: `${footer}`, iconURL: `${footer_icon}` } )
         

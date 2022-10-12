@@ -67,8 +67,7 @@ module.exports = {
                 .setColor(farba_error)
 
             return interaction.editReply({
-                embeds: [Embed],
-                ephemeral: true
+                embeds: [Embed]
             });
         }
 
@@ -110,7 +109,7 @@ module.exports = {
                 .setDescription(`Uspesne sa podarilo najst a pridat do poradia tvoju hudbu!`)
                 .setThumbnail(song.thumbnail)
                 .addFields({
-                    name: `**${song.title}** - ${song.duration}`,
+                    name: `**${song.title}** - \`${song.duration}\``,
                     value: `${song.url}`
                 })
                 .setFooter({
@@ -135,7 +134,7 @@ module.exports = {
                 // Nepodarilo sa najst zaidnu pesnicku s takou url
                 const Embed = new EmbedBuilder()
                     .setTitle(`Hudba ${emoji_error}`)
-                    .setDescription('Nepodarilo sa najst ziadne video s URL `' + url + '`!')
+                    .setDescription(`Nepodarilo sa najst ziadne video s URL \`${url}\`.`)
                     .setFooter({
                         text: `${footer}`, iconURL: `${footer_icon}`
                     })
@@ -178,7 +177,7 @@ module.exports = {
                 // Nepodarilo sa najst zaidnu pesnicku s takou url
                 const Embed = new EmbedBuilder()
                     .setTitle(`Hudba ${emoji_error}`)
-                    .setDescription('Nepodarilo sa najst ziadne video s nazvom `' + nazov + '`!')
+                    .setDescription(`Nepodarilo sa najst ziadne video s nazvom \`${nazov}\` !`)
                     .setFooter({
                         text: `${footer}`, iconURL: `${footer_icon}`
                     })
