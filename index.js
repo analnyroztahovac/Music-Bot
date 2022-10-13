@@ -38,8 +38,8 @@ client.on('interactionCreate', async interaction => {
 	
 	if (!interaction.isChatInputCommand()) return;
 
-	const command = client.commands.get(interaction.commandName);
 	const command_name = interaction.commandName;
+	const command = client.commands.get(command_name);
 
 	// Check ci je command platny
 	if (!command) return;
