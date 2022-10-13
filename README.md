@@ -15,10 +15,10 @@ Hlavnym cielom bota je poskytnut prehravanie hudby vo Voice kanali pomocou par p
  - [x] [`/play { song | search | playlist }`](https://github.com/analnyroztahovac/Music-Bot/blob/main/commands/play.js) prikaz
  - [x] [`/info`](https://github.com/analnyroztahovac/Music-Bot/blob/main/commands/info.js) prikaz
  - [x] [`/poradie`](https://github.com/analnyroztahovac/Music-Bot/blob/main/commands/poradie.js) prikaz
+ - [x] [`/skip`](https://github.com/analnyroztahovac/Music-Bot/blob/main/commands/skip.js) prikaz
  - [x] ~~Konfiguracia povolenych / zakazanych kanalov~~ ( pouzi server integrations )
  - [x] Konfiguracia embedov = [farba, footer](https://github.com/analnyroztahovac/Music-Bot/blob/main/config.json)
  - [ ] `/stop` prikaz
- - [ ] `/skip` prikaz
 
 ## Contributions
 
