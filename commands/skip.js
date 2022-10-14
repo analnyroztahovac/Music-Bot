@@ -28,10 +28,10 @@ module.exports = {
         if (!interaction.member.voice.channel) {
             // Member sa nenachadza vo voice kanali
             const Embed = new EmbedBuilder()
-            .setTitle(`Hudba ${emoji_error}`)
-            .setDescription('Pre pouzitie tohto prikazu sa musis nachadzat vo Voice kanali!')
-            .setFooter( { text: `${footer}`, iconURL: `${footer_icon}` } )
-            .setColor(farba_error)
+                .setTitle(`Hudba ${emoji_error}`)
+                .setDescription('Pre pouzitie tohto prikazu sa musis nachadzat vo Voice kanali!')
+                .setFooter( { text: `${footer}`, iconURL: `${footer_icon}` } )
+                .setColor(farba_error)
             
             return interaction.editReply( { embeds: [Embed] } ); }
         

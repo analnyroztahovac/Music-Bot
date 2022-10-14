@@ -25,8 +25,8 @@ module.exports = {
         
         const play_prikaz = `**+>** \`search\` argument sluzi na vyhladanie pesnicky podla jej nazvu \n**+>** \`song\` argument sluzi na vyhladnie pesnicky podla jej URL adresy \n**+>** \`playlist\` argument sluzi na vyhladanie playlistu podla jeho URL adresy`
         const poradie_prikaz = 'Prikaz sluzi na zobrazenie aktualne hranej pesnicky ( *ak nejaka je* ) a za nou nasledujuce v poradi ( *ak nejake su* ) \n**+>** \`strana\` je optioal argument pre zobrazenie poradia na zadanej strane'
-        const skip_prikaz = 'Prikaz sluzi na preskocanie aktualnej pesnicky a zaroven automaticky pusti za nou nasledujucu.'  
-        const stop_prikaz = 'Prikaz sluzi na ukoncenie aktualnej pesnicky a zaroven za nou nasledujuce ( *ak nejake su* )'
+        const skip_prikaz = 'Prikaz sluzi na preskocanie aktualnej pesnicky a zaroven automaticky pustenie za nou nasledujucu.'  
+        const stop_prikaz = 'Prikaz sluzi na ukoncenie prehravania aktualnej pesnicky a zaroven za nou nasledujuce ( *ak nejake su* )'
 
         // Embed const
         const Embed = new EmbedBuilder()
