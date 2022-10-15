@@ -4,31 +4,29 @@ const { Client, Collection, GatewayIntentBits } = require("discord.js");
 const { token } = require('./config.json');
 const { Player } = require("discord-player");
 
-const client = new Client({
-	intents: [
+const client = new Client({ intents: [
 		GatewayIntentBits.Guilds,
-		GatewayIntentBits.GuildVoiceStates
-	]
-});
+		GatewayIntentBits.GuildVoiceStates ] });
 
 client.commands = new Collection();
-const commandsPath = path.join(__dirname, 'commands');
-const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
+// Loopneme cez subory global a guild commandov
+const list_suborov = ["global_commands", "guild_commands"]
+for ( nazov_suboru of list_suborov ) {
+	const commandsPath = path.join(__dirname, `${nazov_suboru}`);
+	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
-client.slashcommands = new Collection()
+	for ( const file of commandFiles ) {
+		const filePath = path.join(commandsPath, file);
+		const command = require(filePath);
+		client.commands.set(command.data.name, command);
+	} }
+
 client.player = new Player(client, {
 	ytdlOptions: {
 		quality: "highestaudio",
 		highWaterMark: 1 << 25
-	}
-})
-
-for (const file of commandFiles) {
-  const filePath = path.join(commandsPath, file);
-	const command = require(filePath);
-	client.commands.set(command.data.name, command);
-}
+	} })
 
 client.once('ready', () => {
 	console.log('Proces bezi!');
