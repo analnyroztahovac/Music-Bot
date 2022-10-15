@@ -19,7 +19,8 @@ const {
     farba_error, /* Farba, ktora bude pouzita pri Embede pokial doslo niekde ku chybe */
     farba_nonerror, /* Farba, ktora bude pouzita pri Embede pokial NEdoslo niekde ku chybe */
     footer, /* Footer, ktory bude pouzity pri embed spravach */
-    footer_icon /* Footer ikona, ktora bude pouzita pri embed spravach */
+    footer_icon, /* Footer ikona, ktora bude pouzita pri embed spravach */
+    footer_icon_error /* Footer ikona pri error embedoch */
     } = require('../config.json');
 
 // Struktura prikazu, subcommandy, popisky, options
@@ -62,7 +63,7 @@ module.exports = {
                 .setTitle(`Hudba ${emoji_error}`)
                 .setDescription('Pre pouzitie tohto prikazu sa musis nachadzat vo Voice kanali!')
                 .setFooter({
-                    text: `${footer}`, iconURL: `${footer_icon}`
+                    text: `${footer}`, iconURL: `${footer_icon_error}`
                 })
                 .setColor(farba_error)
 
@@ -93,7 +94,7 @@ module.exports = {
                     .setTitle(`Hudba ${emoji_error}`)
                     .setDescription('Nepodarilo sa najst ziadne video s URL `' + url + '`!')
                     .setFooter({
-                        text: `${footer}`, iconURL: `${footer_icon}`
+                        text: `${footer}`, iconURL: `${footer_icon_error}`
                     })
                     .setColor(farba_error)
                 return interaction.editReply({
@@ -136,7 +137,7 @@ module.exports = {
                     .setTitle(`Hudba ${emoji_error}`)
                     .setDescription(`Nepodarilo sa najst ziadne video s URL \`${url}\`.`)
                     .setFooter({
-                        text: `${footer}`, iconURL: `${footer_icon}`
+                        text: `${footer}`, iconURL: `${footer_icon_error}`
                     })
                     .setColor(farba_error)
                 return interaction.editReply({
@@ -179,7 +180,7 @@ module.exports = {
                     .setTitle(`Hudba ${emoji_error}`)
                     .setDescription(`Nepodarilo sa najst ziadne video s nazvom \`${nazov}\` !`)
                     .setFooter({
-                        text: `${footer}`, iconURL: `${footer_icon}`
+                        text: `${footer}`, iconURL: `${footer_icon_error}`
                     })
                     .setColor(farba_error)
                 return interaction.editReply({

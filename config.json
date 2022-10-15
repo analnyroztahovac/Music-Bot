@@ -1,6 +1,5 @@
 {
   "token": "vas_token",
-  "prefix": "!",
   "clientID": "925858190271320095",
   "guildID": "903639601636343809",
   "emoji_check": "<:purple_checkmark:1029083633564262501>",
@@ -8,5 +7,7 @@
   "farba_error": "0xff5555",
   "farba_nonerror": "0x8c66b2",
   "footer": "Imedium Music Bot",
-  "footer_icon": "https://i.imgur.com/nr0EsvU.png"
+  "footer_icon": "https://i.imgur.com/nr0EsvU.png",
+  "footer_icon_error": "https://i.imgur.com/6UfoNCi.png",
+  "// Koment ->": "Ikonky upravene markom, dakujem."
 }

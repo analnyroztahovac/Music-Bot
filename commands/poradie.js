@@ -17,7 +17,8 @@ const {
     farba_error, /* Farba, ktora bude pouzita pri Embede pokial doslo niekde ku chybe */
     farba_nonerror, /* Farba, ktora bude pouzita pri Embede pokial NEdoslo niekde ku chybe */
     footer, /* Footer, ktory bude pouzity pri embed spravach */
-    footer_icon /* Footer ikona, ktora bude pouzita pri embed spravach */
+    footer_icon, /* Footer ikona, ktora bude pouzita pri embed spravach */
+    footer_icon_error /* Footer ikona pri error embedoch */
     } = require('../config.json');
 
 // Struktura prikazu, popisky, option
@@ -39,7 +40,7 @@ module.exports = {
             const Embed = new EmbedBuilder()
                 .setTitle(`Hudba ${emoji_error}`)
                 .setDescription("Neboli najdene ziadne pesnicky v poradi.")
-                .setFooter( { text: `${footer}`, iconURL: `${footer_icon}` } )
+                .setFooter( { text: `${footer}`, iconURL: `${footer_icon_error}` } )
                 .setColor(farba_error)
             return interaction.editReply( {embeds: [Embed] } ); }
         
@@ -53,7 +54,7 @@ module.exports = {
             const Embed = new EmbedBuilder()
                 .setTitle(`Hudba ${emoji_error}`)
                 .setDescription(`Zadal si vacsiu stranu nez existuje. Najvacsia strana, ktoru mozes zadat je ${max_stran}`)
-                .setFooter( { text: `${footer}`, iconURL: `${footer_icon}` } )
+                .setFooter( { text: `${footer}`, iconURL: `${footer_icon_error}` } )
                 .setColor(farba_error)
             return interaction.editReply( { embeds: [Embed] } ); }
         
