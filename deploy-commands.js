@@ -11,19 +11,28 @@ const { clientID, guildID, token } = require('./config.json');
 
 
 // Constanta pre vytvorene prikazy
-const commands = [];
-const commandsPath = path.join(__dirname, 'commands');
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-
-for (const file of commandFiles) {
-    const filePath = path.join(commandsPath, file);
-	const command = require(filePath);
-	commands.push(command.data.toJSON());
-}
-
+const list_suborov = ["global_commands", "guild_commands"]
 const rest = new REST({ version: '10' }).setToken(token);
 
-// Output log
-rest.put(Routes.applicationGuildCommands(clientID, guildID), { body: commands })
-    .then(() => console.log(`Uspesne registrovane prikazy.`))
-    .catch(console.error);
+for ( nazov_suboru of list_suborov ) {
+    
+    const commands = [];
+    const commandsPath = path.join(__dirname, `${nazov_suboru}`)
+    const commandFiles = fs.readdirSync(`./${nazov_suboru}`).filter(file => file.endsWith('.js'));
+
+    for ( const file of commandFiles ) {
+        const filePath = path.join(commandsPath, file);
+        const command = require(filePath)
+        commands.push(command.data.toJSON())
+    }
+
+    switch (nazov_suboru) {
+        case "global_commands":
+            rest.put(Routes.applicationCommands(clientID), { body: commands })
+                .then(() => console.log('Uspesne registrovane Global prikazy'))
+            break;
+        case "guild_commands":
+            rest.put(Routes.applicationGuildCommands(clientID, guildID), { body: commands })
+                .then(() => console.log('Uspesne registrovane Guild prikazy!') )
+            break; }
+}
