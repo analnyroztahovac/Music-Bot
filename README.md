@@ -7,18 +7,18 @@ Zdrojovy kod pre Music Bota vytvoreneho pomocou `discord.js`.
 Cielom projektu (pre mna) je nadobudnut nejake skusenosti v JavaScripte.</br>
 Hlavnym cielom bota je poskytnut prehravanie hudby vo Voice kanali pomocou par prikazov, teda ziadny bloatware s 80 prikazmi od A po Z...
 
-**+** Node verzia -> `v16.13.0`</br>
-**+** Discord JS verzia -> `14.3.0`</br>
+**+** Node verzia -> `v16.18.0`</br>
+**+** Discord JS verzia -> `14.6.0`</br>
 **+** Start projektu: `8.10.2022`</br>
 
 ### Todo List:
- - [x] [`/play { song | search | playlist }`](https://github.com/analnyroztahovac/Music-Bot/blob/main/commands/play.js) prikaz
- - [x] [`/info`](https://github.com/analnyroztahovac/Music-Bot/blob/main/commands/info.js) prikaz
- - [x] [`/poradie`](https://github.com/analnyroztahovac/Music-Bot/blob/main/commands/poradie.js) prikaz
- - [x] [`/skip`](https://github.com/analnyroztahovac/Music-Bot/blob/main/commands/skip.js) prikaz
+ - [x] [`/play { song | search | playlist }`](https://github.com/analnyroztahovac/Music-Bot/blob/main/guild_commands/play.js) prikaz
+ - [x] [`/info`](https://github.com/analnyroztahovac/Music-Bot/blob/main/global_commands/info.js) prikaz
+ - [x] [`/poradie`](https://github.com/analnyroztahovac/Music-Bot/blob/main/guild_commands/poradie.js) prikaz
+ - [x] [`/skip`](https://github.com/analnyroztahovac/Music-Bot/blob/main/guild_commands/skip.js) prikaz
+ - [x] [`/stop`](https://github.com/analnyroztahovac/Music-Bot/blob/main/guild_commands/stop.js) prikaz
  - [x] ~~Konfiguracia povolenych / zakazanych kanalov~~ ( pouzi server integrations )
  - [x] Konfiguracia embedov = [farba, footer](https://github.com/analnyroztahovac/Music-Bot/blob/main/config.json)
- - [ ] `/stop` prikaz
 
 ## Contributions
 
@@ -27,6 +27,29 @@ Pri PR nezabudnite **dostatocne** okomentovat kod.
 
 ### Kontakt
 Discord - `drjoenh#6291` <sub> ( ID ak si zmenim discriminator alebo nick `656146295555358736` )</sub>
+
+## Mini-Wiki
+
+Pre hostovanie Bota na svojom PC, pripadne VPS ( *alebo co si vyberiete* ) je potrebne zmenit v [`config.json`](https://github.com/analnyroztahovac/Music-Bot/blob/main/config.json) subore token Bota:
+
+```yaml 
+{
+  "token": "vas_token"
+}
+```
+
+Token svojho Bota najdene na stranke http://discord.com/developers/, vo vami vytvorenej aplikacii v sekcii **Bot**.</br>
+Navod pre vytvorenie aplikacie -> https://discord.com/developers/docs/getting-started</br>
+Po uspesnom rozbehnuti Bota sa uistite ze mate nainstalovane aj [`FFmpeg`](https://ffmpeg.org/), bez toho Bot nemoze prehravat hudbu vo Voice kanaloch.
+
+### Hostovanie na VPS:
+ - Kompletny navod pre hostovanie DC Bota na VPS -> https://www.writebots.com/discord-bot-hosting/
+ - Navod pre nainstalovanie FFmpeg na Ubuntu -> https://linuxize.com/post/how-to-install-ffmpeg-on-ubuntu-20-04/
+
+### Nastavovanie permisii:
+- Pre nastavovanie permisii pre pouzitie roznych prikazov v roznych kanaloch je mozne pouzit built-in Discord funkciu v `Server Integrations` na danom discord serveri.</br>
+![ukazka_raw](https://user-images.githubusercontent.com/89749147/196278725-a9747a77-a487-4101-bcd6-d63d49399904.png)
+
 
 ## Licencia
 MIT License
