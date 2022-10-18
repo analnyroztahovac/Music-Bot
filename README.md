@@ -30,17 +30,25 @@ Discord - `drjoenh#6291` <sub> ( ID ak si zmenim discriminator alebo nick `65614
 
 ## Mini-Wiki
 
-Pre hostovanie Bota na svojom PC, pripadne VPS ( *alebo co si vyberiete* ) je potrebne zmenit v [`config.json`](https://github.com/analnyroztahovac/Music-Bot/blob/main/config.json) subore token Bota:
+### Info:
+Pre hostovanie Bota na svojom PC, pripadne VPS ( *alebo co si vyberiete* ) je potrebne zmenit v [`config.json`](https://github.com/analnyroztahovac/Music-Bot/blob/main/config.json) subore `token` ako aj `guildID`, `clientID` ( ID Bota ), `emoji_check`, `emoji_error` ( Zobrazuje Emoji pri embed spravach ):
 
 ```yaml 
 {
-  "token": "vas_token"
+  "token": "vas_token",
+  "clientID": "id_vasho_bota",
+  "guildID": "id_vasho_servera",
+  "emoji_check": "id_vasho_emoji",
+  "emoji_error": "id_vasho_emoji"
 }
 ```
 
-Token svojho Bota najdene na stranke http://discord.com/developers/, vo vami vytvorenej aplikacii v sekcii **Bot**.</br>
-Navod pre vytvorenie aplikacie -> https://discord.com/developers/docs/getting-started</br>
-Po uspesnom rozbehnuti Bota sa uistite ze mate nainstalovane aj [`FFmpeg`](https://ffmpeg.org/), bez toho Bot nemoze prehravat hudbu vo Voice kanaloch.
+Format pre nastavovanie emoji je -> `<:emoji_nazov:emoji_id>`.</br>
+Token svojho Bota ako aj jeho ID najdete na stranke http://discord.com/developers/, vo vami vytvorenej aplikacii.</br>
+( Navod pre vytvorenie aplikacie -> https://discord.com/developers/docs/getting-started ) </br> 
+Po nastaveni `config.yml` sa uistite, ze ste spustili ( *Netreba pri kazdom zapnuti iba, iba pri prvom pre registrovanie guild prikazov na vami vybranom serveri.* ) `deploy-commands.js`, ktore Vam zaregistruje dane prikazy na serveri.</br>
+Po uspesnom rozbehnuti Bota sa uistite, ze mate nainstalovane aj [`FFmpeg`](https://ffmpeg.org/), bez toho Bot nemoze prehravat hudbu vo Voice kanaloch.
+
 
 ### Hostovanie na VPS:
  - Kompletny navod pre hostovanie DC Bota na VPS -> https://www.writebots.com/discord-bot-hosting/
