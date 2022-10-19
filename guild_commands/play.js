@@ -23,16 +23,6 @@ const {
     footer_icon_error /* Footer ikona pri error embedoch */
     } = require('../config.json');
 
-// Funkcia pre premenu statusu bota
-function statusBot(songName) {
-    const songLength = songName.length
-    // Ak je vacsie ako povoleny limit tak to zmensime a pridame 3 bodky
-    if ( songLength >= 63 ) {
-        songName = songName.slice(0,60).concat("..."); }
-    // returneme songName, ci uz bol upraveny alebo nie
-    return songName;
-}
-
 // Struktura prikazu, subcommandy, popisky, options
 module.exports = {
     data: new SlashCommandBuilder()
@@ -115,10 +105,6 @@ module.exports = {
             const song = hladanie.tracks[0];
             await queue.addTrack(song);
 
-            // Nastavime aj status bota na aktualne hrajucu pesnicku
-            const statusString = statusBot(song.title);
-            await interaction.client.user.setActivity(`${statusString}`, { type: ActivityType.Playing } );
-
             const Embed = new EmbedBuilder()
                 .setTitle(`Hudba ${emoji_check}`)
                 .setDescription(`Uspesne sa podarilo najst a pridat do poradia tvoju hudbu!`)
@@ -162,10 +148,6 @@ module.exports = {
             const playlist = hladanie.playlist
             await queue.addTracks(hladanie.tracks)
             
-            // Nastavime aj status bota na aktualne hrajucu pesnicku
-            const statusString = statusBot(playlist.title);
-            await interaction.client.user.setActivity(`${statusString}`, { type: ActivityType.Playing } );
-
             // Posleme spravu s embedom
             const Embed = new EmbedBuilder()
                 .setTitle(`Hudba ${emoji_check}`)
@@ -208,10 +190,6 @@ module.exports = {
 
             const song = hladanie.tracks[0]
             await queue.addTrack(song)
-
-            // Nastavime aj status bota na aktualne hrajucu pesnicku
-            const statusString = statusBot(song.title);
-            await interaction.client.user.setActivity(`${statusString}`, { type: ActivityType.Playing } );
 
             // Posleme spravu s embedom
             const Embed = new EmbedBuilder()

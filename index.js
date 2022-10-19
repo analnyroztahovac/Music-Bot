@@ -67,25 +67,30 @@ client.on('interactionCreate', async interaction => {
   prehravania a nasledne pre nastavenie
   aktivity bota podla prehravanej pesnicky.
 */
-const player = client.music;
+const player = client.player;
 
 // Pri zacati prehravania hudby
-player.on('trackStart', async ( track ) => {
+player.on('trackStart', async ( queue ) => {
     
     // Zistime dlzku aktualnej hudby a nahradime ju podla potreby
-    const songName = track.title
-    if ( songName.length >= 63 ) {
+    let songName = queue.current.title
+	
+	if ( songName.length >= 63 ) {
         songName = songName.slice(0,60).concat("..."); }
-    
+
     await client.user.setActivity(`${songName}`, { type: ActivityType.Playing } );
-})
+});
 
 // Pri ukonceni prehravania hudby
 player.on('queueEnd', async () => {
 
     // Ukoncil hranie, zmazeme status
-    await client.user.setActivity()
-})
+    await client.user.setActivity() } );
+
+player.on('botDisconnect', async () => {
+
+	// Odpojil sa z roomky, zmazeme status
+	await client.user.setActivity() } );
 
 
 client.login(token);
