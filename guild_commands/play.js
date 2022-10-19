@@ -9,7 +9,7 @@
 */
 
 /* Zakladne constanty potrebne pre celkove fungovanie prikazu */
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder, ActivityType } = require("discord.js");
 const { QueryType } = require("discord-player");
 
 /* "Konfiguracia" emoji a farieb pre embedy */
@@ -132,10 +132,10 @@ module.exports = {
             })
 
             if (hladanie.tracks.length === 0) {
-                // Nepodarilo sa najst zaidnu pesnicku s takou url
+                // Nepodarilo sa najst zaiden playlist so zadanou URL adresou
                 const Embed = new EmbedBuilder()
                     .setTitle(`Hudba ${emoji_error}`)
-                    .setDescription(`Nepodarilo sa najst ziadne video s URL \`${url}\`.`)
+                    .setDescription(`Nepodarilo sa najst ziaden playlist s URL \`${url}\`.`)
                     .setFooter({
                         text: `${footer}`, iconURL: `${footer_icon_error}`
                     })
@@ -147,7 +147,7 @@ module.exports = {
 
             const playlist = hladanie.playlist
             await queue.addTracks(hladanie.tracks)
-
+            
             // Posleme spravu s embedom
             const Embed = new EmbedBuilder()
                 .setTitle(`Hudba ${emoji_check}`)
