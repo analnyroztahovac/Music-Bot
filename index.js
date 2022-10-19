@@ -1,6 +1,7 @@
+// Zakladne variability
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Collection, GatewayIntentBits } = require("discord.js");
+const { Client, Collection, GatewayIntentBits, ActivityType } = require("discord.js");
 const { token } = require('./config.json');
 const { Player } = require("discord-player");
 
@@ -9,9 +10,14 @@ const client = new Client({ intents: [
 		GatewayIntentBits.GuildVoiceStates ] });
 
 client.commands = new Collection();
+client.player = new Player(client, {
+    ytdlOptions: {
+        quality: "highestaudio",
+        highWaterMark: 1 << 25 } 
+    } );
 
 // Loopneme cez subory global a guild commandov
-const list_suborov = ["global_commands", "guild_commands"]
+const list_suborov = ["global_commands", "guild_commands"];
 for ( nazov_suboru of list_suborov ) {
 	const commandsPath = path.join(__dirname, `${nazov_suboru}`);
 	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
@@ -22,16 +28,12 @@ for ( nazov_suboru of list_suborov ) {
 		client.commands.set(command.data.name, command);
 	} }
 
-client.player = new Player(client, {
-	ytdlOptions: {
-		quality: "highestaudio",
-		highWaterMark: 1 << 25
-	} })
+client.once('ready', () => { console.log('Proces bezi!'); } );
 
-client.once('ready', () => {
-	console.log('Proces bezi!');
-});
-
+/* 
+  Reakcia na prikazy, ak sa jedna o prikaz
+  info tak ho deferneme ako ephemeral
+*/
 client.on('interactionCreate', async interaction => {
 	
 	if (!interaction.isChatInputCommand()) return;
@@ -48,13 +50,42 @@ client.on('interactionCreate', async interaction => {
 		await command.run( { interaction } )
 		return };
 	
+
+    // Pokusim sa ho spustit
 	try {
 		await interaction.deferReply()
-		await command.run( {client, interaction} )
+		await command.run( { client, interaction } )
 	} catch (error) {
 		console.error(error);
 		await interaction.reply({ content: 'Niekde nastala chyba, skus znovu!', ephemeral: true });
 	}
 });
+
+
+/*
+  Reakcia na spustenie hudby alebo ukoncenie,
+  prehravania a nasledne pre nastavenie
+  aktivity bota podla prehravanej pesnicky.
+*/
+const player = client.music;
+
+// Pri zacati prehravania hudby
+player.on('trackStart', async ( track ) => {
+    
+    // Zistime dlzku aktualnej hudby a nahradime ju podla potreby
+    const songName = track.title
+    if ( songName.length >= 63 ) {
+        songName = songName.slice(0,60).concat("..."); }
+    
+    await client.user.setActivity(`${songName}`, { type: ActivityType.Playing } );
+})
+
+// Pri ukonceni prehravania hudby
+player.on('queueEnd', async () => {
+
+    // Ukoncil hranie, zmazeme status
+    await client.user.setActivity()
+})
+
 
 client.login(token);
