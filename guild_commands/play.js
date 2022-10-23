@@ -9,7 +9,7 @@
 */
 
 /* Zakladne constanty potrebne pre celkove fungovanie prikazu */
-const { SlashCommandBuilder, EmbedBuilder, ActivityType } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { QueryType } = require("discord-player");
 
 /* "Konfiguracia" emoji a farieb pre embedy */
