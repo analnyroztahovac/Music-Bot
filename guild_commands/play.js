@@ -51,7 +51,7 @@ module.exports = {
             .setName("search")
             .setDescription("Vyhlada pesnicku podla navzu.")
             .addStringOption((option) =>
-                option.setName("nazov").setDescription("Zadaj nazov pesnicky").setRequired(true))
+                option.setName("nazov").setDescription("Nazov pesnicky").setRequired(true))
         ),
 
     // Spustenie funkcie prikazu
@@ -62,151 +62,125 @@ module.exports = {
             const Embed = new EmbedBuilder()
                 .setTitle(`Hudba ${emoji_error}`)
                 .setDescription('Pre pouzitie tohto prikazu sa musis nachadzat vo Voice kanali!')
-                .setFooter({
-                    text: `${footer}`, iconURL: `${footer_icon_error}`
-                })
+                .setFooter( { text: footer, iconURL: footer_icon_error } )
                 .setColor(farba_error)
-
-            return interaction.editReply({
-                embeds: [Embed]
-            });
+            return interaction.editReply( { embeds: [Embed] } );
         }
 
         const queue = await client.player.createQueue(interaction.guild)
         if (!queue.connection)
-            // Pokial nie je BOT v danom voice kanali , tak sa tam pripoji
+            // Pokial nie je BOT v danom voice kanali, tak sa tam pripoji
             await queue.connect(interaction.member.voice.channel)
 
-        // Vyberieme ktory argument member pouzil (song; playlist; search)
+        // Pomocou switchu vyberieme, ktory argument member pouzil (song; playlist; search)
         const argument = interaction.options.getSubcommand()
-        if (argument === "song") {
 
-            // Vybral pridat prave jednu songu do rady
-            let url = interaction.options.getString("url");
-            const hladanie = await client.player.search(url, {
-                requestedBy: interaction.user,
-                searchEngine: QueryType.YOUTUBE_VIDEO
-            })
+        switch ( argument ) {
 
-            if (hladanie.tracks.length === 0) {
-                // Nepodarilo sa najst zaidnu pesnicku s takou url
+            case "song": {
+                
+                // Vybral pridat prave jednu songu do rady
+                let url = interaction.options.getString("url");
+                const hladanie = await client.player.search(url, {
+                    requestedBy: interaction.user,
+                    searchEngine: QueryType.YOUTUBE_VIDEO })
+
+                if (hladanie.tracks.length === 0) {
+                    // Nepodarilo sa najst zaidnu pesnicku s takou url
+                    const Embed = new EmbedBuilder()
+                        .setTitle(`Hudba ${emoji_error}`)
+                        .setDescription(`Nepodarilo sa najst ziadne video s URL \`${url}\`!`)
+                        .setFooter( { text: footer, iconURL: footer_icon_error } )
+                        .setColor(farba_error)
+                    return interaction.editReply( { embeds: [Embed] } );
+                }
+
+                const song = hladanie.tracks[0];
+                await queue.addTrack(song);
+
                 const Embed = new EmbedBuilder()
-                    .setTitle(`Hudba ${emoji_error}`)
-                    .setDescription('Nepodarilo sa najst ziadne video s URL `' + url + '`!')
-                    .setFooter({
-                        text: `${footer}`, iconURL: `${footer_icon_error}`
-                    })
-                    .setColor(farba_error)
-                return interaction.editReply({
-                    embeds: [Embed]
-                });
+                    .setTitle(`Hudba ${emoji_check}`)
+                    .setDescription(`Uspesne sa podarilo najst a pridat do poradia tvoju hudbu!`)
+                    .setThumbnail(song.thumbnail)
+                    .addFields( {
+                        name: `**${song.title}** - \`${song.duration}\``,
+                        value: song.url
+                        } )
+                    .setFooter( { text: footer, iconURL: footer_icon } )
+                    .setColor(farba_nonerror)
+                await interaction.editReply( { embeds: [Embed] } )
+                break; 
             }
 
-            const song = hladanie.tracks[0];
-            await queue.addTrack(song);
+            case "playlist": {
+                        
+                let url = interaction.options.getString("url");
+                const hladanie = await client.player.search(url, {
+                    requestedBy: interaction.user,
+                    searchEngine: QueryType.YOUTUBE_PLAYLIST })
 
-            const Embed = new EmbedBuilder()
-                .setTitle(`Hudba ${emoji_check}`)
-                .setDescription(`Uspesne sa podarilo najst a pridat do poradia tvoju hudbu!`)
-                .setThumbnail(song.thumbnail)
-                .addFields({
-                    name: `**${song.title}** - \`${song.duration}\``,
-                    value: `${song.url}`
-                })
-                .setFooter({
-                    text: `${footer}`, iconURL: `${footer_icon}`
-                })
-                .setColor(farba_nonerror)
-            await interaction.editReply({
-                embeds: [Embed]
-            })
-        }
+                if (hladanie.tracks.length === 0) {
+                    // Nepodarilo sa najst zaiden playlist so zadanou URL adresou
+                    const Embed = new EmbedBuilder()
+                        .setTitle(`Hudba ${emoji_error}`)
+                        .setDescription(`Nepodarilo sa najst ziaden playlist s URL \`${url}\`.`)
+                        .setFooter( { text: footer, iconURL: footer_icon_error } )
+                        .setColor(farba_error)
+                    return interaction.editReply( { embeds: [Embed] } );
+                }
 
-        // Vybral playlist argument
-        else if (argument === "playlist") {
+                const playlist = hladanie.playlist
+                await queue.addTracks(hladanie.tracks)
 
-            let url = interaction.options.getString("url");
-            const hladanie = await client.player.search(url, {
-                requestedBy: interaction.user,
-                searchEngine: QueryType.YOUTUBE_PLAYLIST
-            })
-
-            if (hladanie.tracks.length === 0) {
-                // Nepodarilo sa najst zaiden playlist so zadanou URL adresou
+                // Posleme spravu s embedom
                 const Embed = new EmbedBuilder()
-                    .setTitle(`Hudba ${emoji_error}`)
-                    .setDescription(`Nepodarilo sa najst ziaden playlist s URL \`${url}\`.`)
-                    .setFooter({
-                        text: `${footer}`, iconURL: `${footer_icon_error}`
+                    .setTitle(`Hudba ${emoji_check}`)
+                    .setDescription('Uspesne sa podarilo najst a pridat do poradia tvoj playlist!')
+                    .setThumbnail(playlist.thumbnail)
+                    .addFields({
+                        name: `**${playlist.title}** - ${result.tracks.length} pesniciek`,
+                        value: `${playlist.url}`
                     })
-                    .setColor(farba_error)
-                return interaction.editReply({
-                    embeds: [Embed]
-                });
+                    .setFooter( { text: footer, iconURL: footer_icon } )
+                    .setColor(farba_nonerror)
+                await interaction.editReply( { embeds: [Embed] } )
+                break;
             }
 
-            const playlist = hladanie.playlist
-            await queue.addTracks(hladanie.tracks)
-            
-            // Posleme spravu s embedom
-            const Embed = new EmbedBuilder()
-                .setTitle(`Hudba ${emoji_check}`)
-                .setDescription('Uspesne sa podarilo najst a pridat do poradia tvoj playlist!')
-                .setThumbnail(playlist.thumbnail)
-                .addFields({
-                    name: `**${playlist.title}** - ${result.tracks.length} pesniciek`,
-                    value: `${playlist.url}`
-                })
-                .setFooter({
-                    text: `${footer}`, iconURL: `${footer_icon}`
-                })
-                .setColor(farba_nonerror)
-            await interaction.editReply({
-                embeds: [Embed]
-            })
-        }
-        // Vybral search argument
-        else if (argument === "search") {
+            case "search": {
+                    
+                let nazov = interaction.options.getString("nazov");
+                const hladanie = await client.player.search(nazov, {
+                    requestedBy: interaction.user,
+                    searchEngine: QueryType.AUTO } )
 
-            let nazov = interaction.options.getString("nazov");
-            const hladanie = await client.player.search(nazov, {
-                requestedBy: interaction.user,
-                searchEngine: QueryType.AUTO
-            })
+                if (hladanie.tracks.length === 0) {
+                    // Nepodarilo sa najst zaidnu pesnicku s takou url
+                    const Embed = new EmbedBuilder()
+                        .setTitle(`Hudba ${emoji_error}`)
+                        .setDescription(`Nepodarilo sa najst ziadne video s nazvom \`${nazov}\` !`)
+                        .setFooter( { text: footer, iconURL: footer_icon_error } )
+                        .setColor(farba_error)
+                    return interaction.editReply( { embeds: [Embed] } );
+                }
 
-            if (hladanie.tracks.length === 0) {
-                // Nepodarilo sa najst zaidnu pesnicku s takou url
+                const song = hladanie.tracks[0]
+                await queue.addTrack(song)
+
+                // Posleme spravu s embedom
                 const Embed = new EmbedBuilder()
-                    .setTitle(`Hudba ${emoji_error}`)
-                    .setDescription(`Nepodarilo sa najst ziadne video s nazvom \`${nazov}\` !`)
-                    .setFooter({
-                        text: `${footer}`, iconURL: `${footer_icon_error}`
+                    .setTitle(`Hudba ${emoji_check}`)
+                    .setDescription(`Podla tvojho zadaneho nazvu \`${nazov}\` sa podarilo najst a pridat do poradia tuto pesnicku.`)
+                    .setThumbnail(song.thumbnail)
+                    .addFields({
+                        name: `**${song.title}** - \`${song.duration}\``,
+                        value: `${song.url}`
                     })
-                    .setColor(farba_error)
-                return interaction.editReply({
-                    embeds: [Embed]
-                });
+                    .setFooter( { text: footer, iconURL: footer_icon } )
+                    .setColor(farba_nonerror)
+                await interaction.editReply( { embeds: [Embed] } );
+                break;
             }
-
-            const song = hladanie.tracks[0]
-            await queue.addTrack(song)
-
-            // Posleme spravu s embedom
-            const Embed = new EmbedBuilder()
-                .setTitle(`Hudba ${emoji_check}`)
-                .setDescription(`Podla tvojho zadaneho nazvu \`${nazov}\` sa podarilo najst a pridat do poradia tuto pesnicku.`)
-                .setThumbnail(song.thumbnail)
-                .addFields({
-                    name: `**${song.title}** - \`${song.duration}\``,
-                    value: `${song.url}`
-                })
-                .setFooter({
-                    text: `${footer}`, iconURL: `${footer_icon}`
-                })
-                .setColor(farba_nonerror)
-            await interaction.editReply({
-                embeds: [Embed]
-            });
         }
         if (!queue.playing) await queue.play()
     }

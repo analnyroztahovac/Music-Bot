@@ -17,7 +17,7 @@ const rest = new REST({ version: '10' }).setToken(token);
 for ( nazov_suboru of list_suborov ) {
     
     const commands = [];
-    const commandsPath = path.join(__dirname, `${nazov_suboru}`)
+    const commandsPath = path.join(__dirname, nazov_suboru)
     const commandFiles = fs.readdirSync(`./${nazov_suboru}`).filter(file => file.endsWith('.js'));
 
     for ( const file of commandFiles ) {

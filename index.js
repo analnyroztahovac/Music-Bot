@@ -19,7 +19,7 @@ client.player = new Player(client, {
 // Loopneme cez subory global a guild commandov
 const list_suborov = ["global_commands", "guild_commands"];
 for ( nazov_suboru of list_suborov ) {
-	const commandsPath = path.join(__dirname, `${nazov_suboru}`);
+	const commandsPath = path.join(__dirname, nazov_suboru);
 	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
 	for ( const file of commandFiles ) {
@@ -78,7 +78,7 @@ player.on('trackStart', async ( queue ) => {
 	if ( songName.length >= 63 ) {
         songName = songName.slice(0,60).concat("..."); }
 
-    await client.user.setActivity(`${songName}`, { type: ActivityType.Playing } );
+    await client.user.setActivity( songName, { type: ActivityType.Playing } );
 });
 
 // Pri ukonceni prehravania hudby
